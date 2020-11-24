@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 APPNAME="tpcc"
+JAR="/usr/lib/jvm/java-8-openjdk-amd64/bin/jar"
 
 # find voltdb binaries (customized from examples to be one level deeper)
 if [ -e ../../../bin/voltdb ]; then
@@ -32,11 +33,14 @@ function clean() {
 
 # compile the source code for procedures and the client into jarfiles
 function jars() {
+    echo "building &&&&"
     # compile java source
     javac -classpath $APPCLASSPATH src/com/procedures/*.java client/com/*.java
     # build procedure and client jars
-    jar cf $APPNAME-procs.jar -C client com/Constants.class -C src com/procedures
-    jar cf $APPNAME-client.jar -C client com
+    #jar cf $APPNAME-procs.jar -C client com/Constants.class -C src com/procedures
+    #jar cf $APPNAME-client.jar -C client com
+    $JAR cf $APPNAME-procs.jar -C client com/Constants.class -C src com/procedures
+    $JAR cf $APPNAME-client.jar -C client com
     # remove compiled .class files
     rm -rf src/com/procedures/*.class client/com/*.class
 }
